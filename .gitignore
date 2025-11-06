@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files
+*.db
+*.sqlite3
+
+# Migrations
+migrations/versions/*.pyc
+migrations/__pycache__/
+migrations/versions/__pycache__/
+
+# Logs
+*.log
+
+# CSV / export files
+*.csv
+
+# Jupyter notebooks (if used)
+*.ipynb_checkpoints/
+
+# Backup / temp files
+*.bak
+*.tmp
