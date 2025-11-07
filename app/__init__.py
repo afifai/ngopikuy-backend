@@ -7,7 +7,7 @@ from config import get_config
 def create_app():
     env_path = Path(__file__).resolve().parent.parent / ".env"
     load_dotenv(dotenv_path=env_path)
-    app = Flask(__name__i)
+    app = Flask(__name__)
     app.config.from_object(get_config())
 
     db.init_app(app)
