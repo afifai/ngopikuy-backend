@@ -15,6 +15,7 @@ ENV/
 .env
 .env.*
 !.env.example
+.python-version
 
 # IDE / Editor
 .vscode/
@@ -31,9 +32,7 @@ Thumbs.db
 *.sqlite3
 
 # Migrations
-migrations/versions/*.pyc
-migrations/__pycache__/
-migrations/versions/__pycache__/
+migrations/
 
 # Logs
 *.log

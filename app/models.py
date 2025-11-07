@@ -18,6 +18,8 @@ class Member(BaseModel):
     name = db.Column(db.String(120), nullable=False, unique=True)
     phone = db.Column(db.String(50))
     telegram_id = db.Column(db.String(50), unique=True)
+    username = db.Column(db.String(100))  # <-- baru
+    opening_balance = db.Column(db.Integer, nullable=False, default=0)  # <-- baru
 
     cash_contributions = db.relationship("CashContribution", backref="member", lazy=True)
     purchases = db.relationship("Purchase", backref="member", lazy=True)
@@ -28,6 +30,8 @@ class Member(BaseModel):
             "name": self.name,
             "phone": self.phone,
             "telegram_id": self.telegram_id,
+            "username": self.username,
+            "opening_balance": self.opening_balance,
             **self._base_dict(),
         }
 

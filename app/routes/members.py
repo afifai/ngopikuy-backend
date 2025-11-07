@@ -10,11 +10,22 @@ def create_member():
     name = (data.get("name") or "").strip()
     phone = (data.get("phone") or "").strip() or None
     telegram_id = (data.get("telegram_id") or "").strip() or None
+    username = (data.get("username") or "").strip() or None
+    opening_balance = int(data.get("opening_balance") or 0)
+
     if not name:
         abort(400, description="name is required")
+
     if telegram_id and Member.query.filter_by(telegram_id=telegram_id).first():
         abort(409, description="telegram_id already exists")
-    m = Member(name=name, phone=phone, telegram_id=telegram_id)
+
+    m = Member(
+        name=name,
+        phone=phone,
+        telegram_id=telegram_id,
+        username=username,
+        opening_balance=opening_balance,
+    )
     db.session.add(m)
     db.session.commit()
     return jsonify(m.to_dict()), 201
@@ -33,18 +44,28 @@ def get_member(member_id):
 def update_member(member_id):
     m = Member.query.get_or_404(member_id)
     data = request.get_json(force=True, silent=True) or {}
+
     if "name" in data:
         name = (data.get("name") or "").strip()
         if not name:
             abort(400, description="name cannot be empty")
         m.name = name
+
     if "phone" in data:
         m.phone = (data.get("phone") or "").strip() or None
+
     if "telegram_id" in data:
         new_tid = (data.get("telegram_id") or "").strip() or None
         if new_tid and Member.query.filter(Member.telegram_id == new_tid, Member.id != member_id).first():
             abort(409, description="telegram_id already in use")
         m.telegram_id = new_tid
+
+    if "username" in data:
+        m.username = (data.get("username") or "").strip() or None
+
+    if "opening_balance" in data:
+        m.opening_balance = int(data.get("opening_balance") or 0)
+
     db.session.commit()
     return jsonify(m.to_dict())
 

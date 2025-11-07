@@ -1,6 +1,6 @@
 from collections import defaultdict
 from flask import Blueprint, request, jsonify
-from ..models import CashContribution, Expense, Purchase
+from ..models import CashContribution, Expense, Purchase, Member
 
 bp = Blueprint("summary", __name__)
 
@@ -32,3 +32,24 @@ def overall():
     months.update([p.date.strftime("%Y-%m") for p in Purchase.query.all()])
     out = [monthly_summary(m) for m in sorted(months)]
     return jsonify(out)
+
+@bp.get("/total")
+def total():
+    # total uang kas (beneran uang)
+    total_cash = sum(c.amount for c in CashContribution.query.all())
+
+    # total pengeluaran
+    total_expenses = sum(e.amount for e in Expense.query.all())
+
+    # total saldo awal anggota (rekap sebelumnya)
+    total_opening = sum(m.opening_balance for m in Member.query.all())
+
+    # saldo akhir kas (uang beneran)
+    balance = total_cash + total_opening - total_expenses
+
+    return jsonify({
+        "total_cash_contributions": total_cash,
+        "total_opening_balance": total_opening,
+        "total_expenses": total_expenses,
+        "balance": balance
+    })

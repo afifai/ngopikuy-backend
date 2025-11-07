@@ -13,18 +13,33 @@ def add_cash():
     start_month = data.get("start_month")
     months = int(data.get("months") or 1)
     note = data.get("note")
+    direction = (data.get("direction") or "forward").lower()  # <-- baru
+
     if not all([member_id, amount, start_month]):
         abort(400, description="member_id, amount, start_month are required")
+
     member = Member.query.get(member_id)
     if not member:
         abort(404, description="member not found")
+
     ym = validate_year_month(str(start_month))
     created = []
+
     for i in range(months):
-        this_month = add_months(ym, i)
-        cc = CashContribution(member_id=member_id, amount=int(amount), year_month=this_month, note=note)
+        if direction == "backward":
+            this_month = add_months(ym, -i)
+        else:
+            this_month = add_months(ym, i)
+
+        cc = CashContribution(
+            member_id=member_id,
+            amount=int(amount),
+            year_month=this_month,
+            note=note,
+        )
         db.session.add(cc)
         created.append(cc)
+
     db.session.commit()
     return jsonify([c.to_dict() for c in created]), 201
 
