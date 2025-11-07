@@ -2,11 +2,13 @@ from flask import Flask, jsonify
 from dotenv import load_dotenv
 from pathlib import Path
 from .extensions import db, migrate
-from config import get_config
 
 def create_app():
     env_path = Path(__file__).resolve().parent.parent / ".env"
     load_dotenv(dotenv_path=env_path)
+    
+
+    from config import get_config
     app = Flask(__name__)
     app.config.from_object(get_config())
 
