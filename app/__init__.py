@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from pathlib import Path
 from .extensions import db, migrate
@@ -10,6 +11,7 @@ def create_app():
 
     from config import get_config
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(get_config())
 
     db.init_app(app)
